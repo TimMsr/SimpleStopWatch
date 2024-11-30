@@ -9,7 +9,7 @@ public class SimpleStopwatch {
         int height = 200;
         frame.setSize(width,height);
 
-        JLabel currentTime = new JLabel("00:00:000",SwingConstants.CENTER); // explain swingconstants
+        JLabel currentTime = new JLabel("00:00:000",SwingConstants.CENTER); 
         
         currentTime.setBounds(0, 0, width, height/2);
         frame.add(currentTime);
@@ -25,12 +25,12 @@ public class SimpleStopwatch {
         frame.add(buttons);
 
 
-        Timer timer = new Timer(1, e -> { //You can include hint to use Actionlistener to simplify the counting part
+        Timer timer = new Timer(1, e -> {
             elapsedTime++;
             int minutes = elapsedTime / 60000;
             int seconds = (elapsedTime / 1000) % 60;
             int milliseconds = elapsedTime % 1000;
-            currentTime.setText(String.format("%02d:%02d:%03d", minutes, seconds, milliseconds)); //You can include hint to use a format specifier (dictates format of numbers)
+            currentTime.setText(String.format("%02d:%02d:%03d", minutes, seconds, milliseconds));
         });
         startButton.addActionListener(e -> timer.start());
         stopButton.addActionListener(e -> timer.stop());
