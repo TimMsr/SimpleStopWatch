@@ -1,6 +1,6 @@
 import javax.swing.*;
 
-public class SimpleStopwatch {
+public class SimpleStopwatch1 {
     public static void main(String[] args) {
         StopwatchUI stopwatch = new StopwatchUI(400, 200);
         stopwatch.display();
@@ -8,30 +8,43 @@ public class SimpleStopwatch {
 }
 
 class StopwatchTimer {
-    private int curTime = 0;
+    private long startTime = 0;
+    private long curTime = 0;
     private Timer timer;
+    private boolean running = false;
 
     public StopwatchTimer(JLabel timeLabel) {
-        //core function
-        timer = new Timer(1, e -> {
-            curTime++;
-            int minutes = curTime / 60000;
-            int seconds = (curTime / 1000) % 60;
-            int milliseconds = curTime % 1000;
-            timeLabel.setText(String.format("%02d:%02d:%03d", minutes, seconds, milliseconds));
+        timer = new Timer(10, e -> {
+            if (running) {
+                long currentTime = System.currentTimeMillis();
+                long totalElapsed = curTime + (currentTime - startTime);
+                int minutes = (int) (totalElapsed / 60000);
+                int seconds = (int) (totalElapsed / 1000) % 60;
+                int milliseconds = (int) (totalElapsed % 1000);
+                timeLabel.setText(String.format("%02d:%02d:%03d", minutes, seconds, milliseconds));
+            }
         });
     }
 
     public void start() {
-        timer.start();
+        if (!running) {
+            running = true;
+            startTime = System.currentTimeMillis();
+            timer.start();
+        }
     }
 
     public void stop() {
-        timer.stop();
+        if (running) {
+            curTime += System.currentTimeMillis() - startTime;
+            running = false;
+            timer.stop();
+        }
     }
 
     public void reset(JLabel timeLabel) {
         timer.stop();
+        running = false;
         curTime = 0;
         timeLabel.setText("00:00:000");
     }
